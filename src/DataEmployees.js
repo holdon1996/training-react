@@ -7,10 +7,6 @@ import { connect } from "react-redux";
 const DataEmployees = (props) => {
   props.getData();
 
-  function insertData1() {
-    props.insertData();
-  }
-
   function DataItem(props) {
     return (
       <tr>
@@ -28,7 +24,7 @@ const DataEmployees = (props) => {
 
   return (
     <>
-      <button className="button-primary" onClick={insertData1}>Insert</button>
+      <button className="button-primary" onClick={props.insertData}>Insert</button>
       <table className="table-default" id="tableEmployee">
         <thead>
           <tr>
