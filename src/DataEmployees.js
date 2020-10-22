@@ -1,11 +1,19 @@
-import React from 'react';
-// import data from './data.json';
-import { getData } from './redux/DataActions'
-import { insertData } from './redux/DataActions'
-import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import AddEmployee from './AddEmployee.js'
 
-const DataEmployees = (props) => {
-  props.getData();
+export default function DataEmployees(props) {
+  const [data, setData] = useState([]);
+
+  if (props.resetData) {
+    setData(props.data);
+  }
+
+  useEffect(() => {
+    console.log(props.data)
+    if (props.data && props.data.length > 0) {
+      setData(props.data);
+    }
+  }, [props.data])
 
   function DataItem(props) {
     return (
@@ -22,9 +30,16 @@ const DataEmployees = (props) => {
     );
   }
 
+  const createEmployee = dataInsert => {
+    console.log('createEmployee : dataInsert');
+    console.log(dataInsert);
+    setData([...data, dataInsert]);
+    props.setRunUndo(true);
+  }
+
   return (
-    <>
-      <button className="button-primary" onClick={props.insertData}>Insert</button>
+    <div className="position-relative">
+      <AddEmployee createEmployee={createEmployee} data={data} />
       <table className="table-default" id="tableEmployee">
         <thead>
           <tr>
@@ -34,27 +49,12 @@ const DataEmployees = (props) => {
         </thead>
         <tbody>
           {
-            props.data.map((e) => {
+            data.map((e) => {
               return <DataItem key={e.id} roll={e.roll} />
             })
           }
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
-
-const mapStateToProps = state => {
-  return {
-    data: state.data
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getData: () => dispatch(getData()),
-    insertData: () => dispatch(insertData())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DataEmployees);

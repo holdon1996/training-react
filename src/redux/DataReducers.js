@@ -16,11 +16,7 @@ const dataReducer = (state = initialState, action) => {
 
         case INSERT_DATA: return {
             ...state,
-            data: [...state.data, {
-                "id": 7,
-                "roll": "課長3",
-                "active": "true"
-            }]
+            data: [...state.data, action.data]
         }
         default: return state
     }

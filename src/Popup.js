@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navigation from './Navigation.js'
 import DataEmployees from './DataEmployees.js'
-import AddEmployee from './AddEmployee.js'
+import { getData } from './redux/DataActions'
+import { connect } from "react-redux";
 
-export default function Popup() {
+const Popup = (props) => {
+  props.getData();
+
+  const [runUndo, setRunUndo] = useState(false);
+  const [resetData, setResetData] = useState(false);
+
+  function UndoData(e) {
+    if (!runUndo) {
+      e.preventDefault();
+    } else {
+      setResetData(true);
+    }
+  }
+
   function HeaderPopup() {
     return (
       <div className="modal-header">
@@ -37,13 +51,9 @@ export default function Popup() {
           <label className="font-size-18 invisible">商品タイプ</label>
           <div className="block-feedback background-feedback magin-top-5">
             表示順の上位にある役職が優先して社員詳細や社員選択時のサジェストの役職名に表示されます。
-                </div>
-          <div className="position-relative">
-            <AddEmployee />
-            <DataEmployees />
-          </div>
+            </div>
+          <DataEmployees setRunUndo={setRunUndo} resetData={resetData} data={props.data} />
           <div>
-
           </div>
         </div>
       </div>
@@ -51,12 +61,21 @@ export default function Popup() {
   }
 
   function FooterPopup() {
-    return (
-      <div className="user-popup-form-bottom">
-        <a className="btn-button button-pale disable  color-999">変更前に戻す</a>
-        <a className="button-blue button-form-register ">保存</a>
-      </div>
-    );
+    if (runUndo) {
+      return (
+        <div className="user-popup-form-bottom">
+          <a className="btn-button button-pale color-999" onClick={UndoData}>変更前に戻す</a>
+          <a className="button-blue button-form-register ">保存</a>
+        </div>
+      );
+    } else {
+      return (
+        <div className="user-popup-form-bottom">
+          <a className="btn-button button-pale disable color-999" onClick={UndoData}>変更前に戻す</a>
+          <a className="button-blue button-form-register ">保存</a>
+        </div>
+      );
+    }
   }
 
   return (
@@ -74,3 +93,18 @@ export default function Popup() {
     </>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    data: state.data
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getData: () => dispatch(getData()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);
+

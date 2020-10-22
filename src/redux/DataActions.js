@@ -6,8 +6,9 @@ export const getData = () => {
     }
 }
 
-export const insertData = () => {
+export const insertData = (data) => {
     return {
-        type: INSERT_DATA
+        type: INSERT_DATA,
+        data
     }
 }
