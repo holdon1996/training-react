@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './content/css/style.css'
 import './content/css/setting.css'
-import Home from './Home.js'
-import Popup from './Popup.js'
+import Home from './components/Home.js'
+import Popup from './components/Popup.js'
 import { Provider } from "react-redux";
 import store from './redux/store';
 
